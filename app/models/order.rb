@@ -60,22 +60,41 @@ class Order < ActiveRecord::Base
 
   def add_products(list)
     p_id_list = self.products.pluck(:id)
+    list = process_params(list)
 
-    list[:order][:ordercontents].each do |prod_id, quan|
+    list.each do |prod_id, quan|
       quan = quan.to_i
       if quan == 0
         next
       elsif p_id_list.include? prod_id
-        oc = self.order_contents.where("product_id =?", prod_id)
+        oc = self.order_contents.where("product_id =?", prod_id).first
         oc.quantity += quan
         oc.save
-      else
+      elsif prod_id != 0
         self.order_contents.create(product_id: prod_id,
                                   quantity: quan)
+      else
+        next
       end
     end
-
   end
+
+  def process_params(list)
+    # Parameters: {"utf8"=>"✓", "authenticity_token"=>"tGvVyCEfLgpv2xvd2UcSLnhS56lrjAqxg/O5M4DNmiY=", "order"=>{"products"=>{"product0"=>"3", "quantity0"=>"3", "product1"=>"", "quantity1"=>"", "product2"=>"", "quantity2"=>"", "product3"=>"", "quantity3"=>"", "product4"=>"", "quantity4"=>""}}, "commit"=>"Save changes", "id"=>"302"}
+    hash = {}
+    memory = []
+    list[:products].each do |k, value|
+      if k[0] == "p"
+        hash[value] = nil
+        memory[k[-1].to_i] = value.to_i
+      elsif k[0] == "q"
+        key = memory[k[-1].to_i]
+        hash[key] = value # if in order
+      end
+    end
+    hash
+  end
+
 
   def bill_card
     CreditCard.find(self.credit_card_id).card_number
