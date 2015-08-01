@@ -1,62 +1,49 @@
 
 <table>
-  <%= form_for order do |f| %>
+<%= form_for order do |f| %>
 
-    <%= f.fields_for :order_contents do |content_field| %>
+  <%= f.fields_for :order_contents do |content_field| %>
 
-      <tr class="row">
-          <% row = content_field.object %>
+    <tr class="row">
+        <% row = content_field.object %>
 
-        <td class="col-sm-9">
-          <div class = "row">
-            <div class="product_desc">
+      <td class="col-sm-9">
+        <div class = "row">
+          <div class="product_desc">
+            <div class="product_img col-sm-3">
+              <%= image_tag 'icon_photo_small.png' %>
+            </div>
 
-              <div class="product_img col-sm-3">
-                <%= image_tag 'icon_photo_small.png' %>
-              </div>
+            <div class="col-sm-6">
+              <h4><%= row.product_name %></h4>
+              <h5><%= row.category_name %></h5>
+            </div>
 
-              <div class="col-sm-6">
-                <h4><%= row.product_name %></h4>
-                <h5><%= row.category_name %></h5>
-              </div>
-
-              <div class="col-sm-3">
-                <p><%= number_to_currency(row.product.price) %></p>
-              </div>
-
+            <div class="col-sm-3">
+              <p><%= number_to_currency(row.product.price) %></p>
             </div>
           </div>
-        </td>
+        </div>
 
-        <td class ="col-sm-3">
-          <div class="pull-left">
-            <p><%= content_field.label :quantity %></p>
-            <p><%= content_field.text_field :quantity %></p>
-          </div>
+      </td>
 
-          <div class="pull-right">
-            <p>Total Price: <%= number_to_currency(row.value) %></p>
-            <%= content_field.label :_destroy, "Remove Item" %>
-            <%= content_field.check_box :_destroy %>
-          </div>
+      <td>
+        <div class="pull-left">
+          <p><%= content_field.label :quantity %></p>
+          <p><%= content_field.text_field :quantity %></p>
+        </div>
+        <div class="pull-right">
+          <p>Total Price: <%= number_to_currency(row.value) %></p>
+          <%= content_field.label :_destroy, "Remove Item" %>
+          <%= content_field.check_box :_destroy %>
+        </div>
+      </td>
 
-        </td>
+    </tr>
 
-      </tr>
+
     <% end %>
 
-    <div class="row">
-      <div class="col-sm-9 text-center">
-        <h4>TOTAL</h4>
-        <h3><%= order.value %></h3>
-      </div>
-      <div class="col-sm-3">
-        <%= f.submit "Update Order Contents" %>
-        <%= link_to "Check Out", "#" %>
-      </div>
-    </div>
-  <% end %>
-</table>
 
 
 </table>
