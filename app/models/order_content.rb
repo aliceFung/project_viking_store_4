@@ -2,11 +2,12 @@ class OrderContent < ActiveRecord::Base
   belongs_to :order
   belongs_to :product
 
+  delegate :category, to: :product
 
   validates :quantity, numericality: true
 
   def category_name
-    product.category.name
+    category.name
   end
 
   def product_name
