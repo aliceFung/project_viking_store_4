@@ -1,30 +1,18 @@
 
 <h2>Shopping Cart Contents</h2>
+
 <div>
-<% form_for @order do |f| %>
-<table>
+  <% if @order.nil? && session[:cart].empty? %>
+    <h3>Your Cart is Currently Empty. Go add <%=link_to "Some Awesome Products", products_path %> to your cart!</h3>
 
-  <%= f.fields_for :order_contents do |content_field| %>
-      <% row = content_field.object %>
-    <tr>
-      <td> <%= row.product.name %> </td>
-      <td> <%= row.product.category %></td>
-      <td> <%= number_to_currency(row.product.price) %> </td>
+  <% elsif @order && @order.order_contents.any? %>
 
-      <td> <%= row.label :quantity %>
-            <%= row.text_field :quantity, value: row.quantity %>
-      </td>
+    <%= render partial: "cart_contents", locals: {order: @order} %>
 
-       <td> Total Price: <%= number_to_currency(row.value) %> </td>
+  <% else %>
 
-        <td> <%= row.label :_destroy,"Remove Item" %>
-          <%= row.check_box :_destroy %> </td>
-     </tr>
-  <%end%>
+    <%= render partial: "visitor_cart_contents", locals: {list: session[:cart]} %>
 
+  <% end %>
 
-
-  <%= f.submit "Update Order Contents" %>
-<% end %>
-</table>
 </div>
