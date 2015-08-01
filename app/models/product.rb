@@ -6,14 +6,22 @@ class Product < ActiveRecord::Base
 
   belongs_to :category
 
-  validates :price, 
-            :numericality => { :greater_than => 0, 
+  validates :price,
+            :numericality => { :greater_than => 0,
                                :less_than_or_equal_to => 10000,
                                :message => "Must be between 0 and 10000." }
   validates :sku,
               :uniqueness => {:message => "Needs to be unique"}
 
   validates :name, :description, :price, :presence => { :message => "Can not be blank" }
+
+  def category_name
+    category.name
+  end
+
+  def find_by_id(num)
+    find(num).first
+  end
 
   def times_ordered
     self.orders.where("checkout_date IS NOT NULL").count

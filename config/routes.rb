@@ -21,7 +21,9 @@ Rails.application.routes.draw do
   resources :products, :only => [:index, :show]
   resource :session, :only => [:new, :create, :destroy]
   resources :orders, :only => [:update, :checkout]
-  get "/shopping_cart" => "orders#shopping_cart", as: "cart"
+  resource :user, :only => [:new, :edit, :update, :destroy]
+  get "/checkout" => "orders#checkout", as: 'checkout'
+  get "/shopping_cart" => "carts#shopping_cart", as: "cart"
 
   # get '/orders/:id', to: 'orders#order_list'
 

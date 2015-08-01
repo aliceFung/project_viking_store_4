@@ -1,0 +1,92 @@
+<h1 class="text-center">Sign Up</h1>
+
+<div class="row">
+
+  <%= form_for @user, {url: user_path} do |f| %>
+
+  <div class="col-md-6">
+    <%= f.fields_for :addresses do |address_f| %>
+      <div>
+        <h4>Saved Address (optional)</h4>
+        <div class="form-group col-sm-12">
+          <%= address_f.label :street_address %>
+          <%= address_f.text_field :street_address %>
+        </div>
+
+        <div class="form-group col-sm-12">
+          <%= address_f.label :city %>
+          <%= address_f.text_field :city %>
+        </div>
+
+        <!-- <div class="inline"> -->
+          <div class="form-group col-sm-6 col-xs-12">
+            <%= address_f.label :state_id %>
+            <%= address_f.collection_select :state_id, State.all, :id, :name %>
+          </div>
+
+          <div class="form-group  col-sm-6 col-xs-12">
+            <%= address_f.label :zip_code %>
+            <%= address_f.text_field :zip_code %>
+          </div>
+<!--         </div> -->
+
+        <div class="form-group">
+          <% if @user.persisted? %>
+            <%= address_f.label :default_billing?, "Default Billing Address" %>
+            <%= address_f.check_box :default_billing? %>
+          <% end %>
+
+          <% if address_f.object.persisted? %>
+            <%= address_f.label :_destroy, "Delete Address" %>
+            <%= address_f.check_box(:_destroy) %>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="col-md-6">
+    <section class="account-info">
+      <div class="form-group">
+        <%= f.label :email %>
+        <%= f.email_field :email %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :email, "Confirm email"%>
+        <%= f.email_field :email %>
+      </div>
+
+      <div class="form-group">
+        <p>Password</p>
+        <input class="form-control" id="disabledInput" type="text" placeholder="Disabled input here..." disabled>
+      </div>
+
+      <div class="form-group">
+        <p>Confirm Password</p>
+        <input class="form-control" id="disabledInput" type="text" placeholder="Disabled input here..." disabled>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :first_name %>
+        <%= f.text_field :first_name %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :last_name %>
+        <%= f.text_field :last_name %>
+      </div>
+
+    </section>
+    <h2>
+      Complete <%= function = (@user.persisted? ? "Edit" : "Sign Up")%>
+    </h2>
+    <%= f.submit function, class: 'btn btn-lg btn-primary' %>
+
+    <% if @user.persisted? %>
+      <%= link_to "Delete my Account", user_path, method: :destroy,
+      data: {confirm: "Are you sure you want to delete you account?"} %>
+    <% end %>
+  </div>
+  <% end %>
+</div>

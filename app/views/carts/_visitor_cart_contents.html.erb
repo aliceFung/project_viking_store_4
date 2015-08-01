@@ -1,0 +1,38 @@
+<h3>inside visitor_cart_contents partial</h3>
+
+<% if list.any? %>
+  <table>
+
+    <% list.each do |prod_id, num| %>
+
+      <tr>
+        <% item = Product.find_by_id(prod_id) %>
+
+        <td> <%= item.name %> </td>
+        <td> <%= item.category_name %></td>
+        <td> <%= number_to_currency(item.price) %> </td>
+
+        <td>
+          <%= text_field_tag :quantity, num %>
+        </td>
+
+        <td>
+          Total Price: <%= number_to_currency(num * item.price) %>
+        </td>
+
+        <td> <%= label_tag :_destroy,"Remove Item" %>
+          <%= check_box_tag :_destroy %> </td>
+        </tr>
+
+    <% end %>
+
+
+  </table>
+
+  <%= submit_tag "Update Order Contents" %>
+    <%= link_to checkout_path do %>
+    <%= button_tag(type: 'button', class: 'btn btn-lg btn-primary') do %>
+        <%= content_tag(:strong, "Check Out") %>
+    <% end %>
+  <% end %>
+<% end %>

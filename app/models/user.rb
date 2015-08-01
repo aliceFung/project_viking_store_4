@@ -25,6 +25,8 @@ class User < ActiveRecord::Base
   has_many :cities, through: :addresses
   has_many :states, through: :addresses
 
+  accepts_nested_attributes_for :addresses, :reject_if => :all_blank, :allow_destroy => :true
+
 
   # ------------------------ Methods -----------------
 

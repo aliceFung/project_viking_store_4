@@ -6,6 +6,8 @@ class Address < ActiveRecord::Base
   has_one :shipping_user, class_name: "User", foreign_key: :shipping_id
   has_one :billing_user, class_name: "User", foreign_key: :billing_id
 
+  delegate :default_billing_id, to: :user
+  delegate :default_shipping_id, to: :user
 
   # ------------------- Validations ---------------------
 
@@ -17,6 +19,9 @@ class Address < ActiveRecord::Base
   # before_create :check_city
 
   # ------------------- Methods ---------------------
-  
+
+  # def default_billing?
+  #   id == self.user.default_billing_id
+  # end
 
 end

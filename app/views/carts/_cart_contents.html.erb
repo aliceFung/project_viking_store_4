@@ -49,4 +49,9 @@
 </table>
 
   <%= f.submit "Update Order Contents" %>
+  <%= link_to checkout_path do %>
+    <%= button_tag(type: 'button', class: 'btn btn-lg btn-primary') do %>
+        <%= content_tag(:strong, "Check Out") %>
+    <% end %>
+  <% end %>
 <% end %>

@@ -8,7 +8,11 @@ class SessionsController < ApplicationController
     if user
       sign_in user
       flash[:success] = "Thanks for signing in, #{user.full_name}!"
-      redirect_to root_path
+      if session[:return_to]
+        redirect_to session.delete(:return_to)
+      else
+        redirect_to root_path
+      end
     else
       flash[:error] = "We couldn't sign you in due to error!"
       render :new
