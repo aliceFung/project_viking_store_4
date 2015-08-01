@@ -1,17 +1,15 @@
+<%= form_tag admin_update_quantity_path(@order), method: :patch do%>
 
-<table class= "table">
-  <tr>
-    <th>ID</th>
-    <th>Quantitiy</th>
-    <th>Price</th>
-    <th>Total Price</th>
-    <th>Remove</th>
-  </tr>
+  <table class= "table">
+    <tr>
+      <th>ID</th>
+      <th>Quantitiy</th>
+      <th>Price</th>
+      <th>Total Price</th>
+      <th>Remove</th>
+    </tr>
 
-<form action=<%=admin_order_path(@order)%> method="post">
-  <input  name ="_method" type="hidden" value="patch" >
-  <input name="utf8" type="hidden" value="✓">
-  <input name="authenticity_token" type="hidden" value=<%=form_authenticity_token %>>
+
     <% @order.order_contents.each do |row| %>
        <tr>
          <td> <%= row.product_id %> </td>
@@ -22,15 +20,10 @@
          <td> <%= number_to_currency(row.value) %> </td>
           <td> <%= link_to "Remove", admin_order_content_path(row.id), method: :delete, class: "alert-danger", data: { confirm: "Are you sure you'd like to remove this product in order?" } %></td>
        </tr>
-    <%end%>
+    <% end %>
+  </table>
 
-
-
-
-</table>
-
-      <input type="submit" value="Submit" >
-</form>
+  <%= submit_tag%>
+<% end %>
 
 <%= link_to "Delete Order", order_path(@order), method: :delete, data: {confirm: "Are you sure?"} %>
-<!-- params { order => { ordercontents=> {row.product_id => value?, row.product_id2}} } -->

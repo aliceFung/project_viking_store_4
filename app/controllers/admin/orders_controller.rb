@@ -7,16 +7,18 @@ class Admin::OrdersController < AdminController
         @orders = @user.orders.limit(100)
       else
         flash[:error] = "No user with this ID found."
-        redirect_to orders_path
+        redirect_to admin_orders_path
       end
     else
       @orders = Order.all.limit(100)
     end
+    render :layout => "admin_layout"
   end
 
   def new
     @order = Order.new
     @user = User.find(params[:user_id])
+    render :layout => "admin_layout"
   end
 
   def create
@@ -36,38 +38,32 @@ class Admin::OrdersController < AdminController
           render :new
         end
     end
+    render :layout => "admin_layout"
   end
 
   def show
     @order = Order.find(params[:id])
     @user=User.find(@order.user_id)
+    render :layout => "admin_layout"
   end
 
   def edit
     @order = Order.find(params[:id])
     @user = User.find(@order.user_id)
     @status_changed=params[:status]
+    render :layout => "admin_layout"
   end
 
   def update
     @order = Order.find(params[:id])
-      if params[:order][:status]=="true"
-        @order.checkout_date=Time.now
-      else
-        @order.checkout_date=nil
-      end
-    if @order.update(whitelisted_order_params)
-      params[:order][:ordercontents].each do |k,v|
-        row=OrderContent.find(k)
-        row.quantity = v
-        row.save
-      end
-      flash[:success] = "Order successfully modified."
+    @user = User.find(@order.user_id)
+    if params[:order][:status]
+      @order.update_status(params[:order][:status])
+      flash[:success] = "Order status changed!"
       redirect_to admin_order_path(@order)
     else
-
-      flash.now[:error] = "Reloading!"#@order.errors.full_messages.first
-      render :edit
+      flash.now[:error] = "Aww. Your order status was not updated."
+      render :edit, :layout => "admin_layout"
     end
   end
 
@@ -80,6 +76,33 @@ class Admin::OrdersController < AdminController
     else
       flash[:error] = @order.errors.full_messages.first
       redirect_to session.delete(:return_to)
+    end
+    render :layout => "admin_layout"
+  end
+
+  def update_quantity
+    @order = Order.find(params[:id])
+    @user = User.find(@order.user_id)
+    if params[:order][:ordercontents]
+      @order.bulk_update_contents(params)
+      flash[:success] = "Order successfully modified."
+      redirect_to admin_order_path(@order)
+    else
+      flash.now[:error] = "Aww. Your order was not updated."
+      render :edit, :layout => "admin_layout"
+    end
+  end
+
+  def add_products
+    @order = Order.find(params[:id])
+    @user = User.find(@order.user_id)
+    if params[:products]
+      @order.add_products(params)
+      flash[:success] = "Products successfully added to order."
+      redirect_to admin_order_path(@order)
+    else
+      flash.now[:error] = "Aww. Your order was not updated."
+      render :edit, :layout => "admin_layout"
     end
   end
 

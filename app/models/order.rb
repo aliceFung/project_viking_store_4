@@ -13,6 +13,8 @@ class Order < ActiveRecord::Base
               foreign_key: :billing_id
 
 
+
+
   def value
     self.order_contents.reduce(0) do |sum, row|
       sum += Product.find(row.product_id).price * row.quantity
@@ -35,6 +37,45 @@ class Order < ActiveRecord::Base
     end
   end
 
+  def update_status(selected)
+    if selected=="true"
+      self.checkout_date=Time.now
+    else
+      self.checkout_date=nil
+    end
+  end
+
+  def bulk_update_contents(list)
+    list[:order][:ordercontents].each do |oc_id, quan|
+      oc = OrderContent.find(oc_id)
+      num = quan.to_i
+      if num == 0
+        oc.destroy
+      else
+        oc.quantity = num
+        oc.save
+      end
+    end
+  end
+
+  def add_products(list)
+    p_id_list = self.products.pluck(:id)
+
+    list[:order][:ordercontents].each do |prod_id, quan|
+      quan = quan.to_i
+      if quan == 0
+        next
+      elsif p_id_list.include? prod_id
+        oc = self.order_contents.where("product_id =?", prod_id)
+        oc.quantity += quan
+        oc.save
+      else
+        self.order_contents.create(product_id: prod_id,
+                                  quantity: quan)
+      end
+    end
+
+  end
 
   def bill_card
     CreditCard.find(self.credit_card_id).card_number

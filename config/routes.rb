@@ -11,8 +11,11 @@ Rails.application.routes.draw do
     resources :products
     resources :users
     resources :addresses
-    resources :orders
     resources :order_contents
+    resources :orders
+    patch "/orders/:id/update_quantity" => "orders#update_quantity",                                  as: "update_quantity"
+    post "/orders/:id/add_products" => "orders#add_products",
+                                        as: "add_products"
   end
 
   resources :products, :only => [:index, :show]

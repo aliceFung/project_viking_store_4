@@ -28,7 +28,7 @@
 
     <div class = "col-sm-8">
       <p>
-        <%= link_to "#{@user.full_name} (click to view)", @user %>
+        <%= link_to "#{@user.full_name} (click to view)", admin_user_path(@user) %>
       </p>
     </div>
 
@@ -83,7 +83,7 @@
     <div class = "col-sm-8">
       <!-- Needs to be a dropdown of 50 states -->
        <%= f.collection_select(:state_id, State.all, :id, :name) %>
-      
+
     </div>
 
   </div><br>

@@ -14,6 +14,8 @@ class Admin::OrderContentsController < AdminController
     @order_contents = OrderContents.where("order_id = ?", @order.id)
     @order.order_contents.each do |oc|
       oc.update(whitelisted_params)
+    end
+    redirect_to admin_order_path(@order)
   end
 
 

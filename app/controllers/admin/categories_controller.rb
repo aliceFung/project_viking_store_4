@@ -2,19 +2,23 @@ class Admin::CategoriesController < AdminController
 
   def index
     @categories = Category.all
+    render :layout => "admin_layout"
   end
 
   def new
     @category = Category.new
+    render :layout => "admin_layout"
   end
 
   def edit
     @category = Category.find(params[:id])
+    render :layout => "admin_layout"
   end
 
   def show
     @category = Category.find(params[:id])
     # @product_list = Product.category_items(params[:id])
+    render :layout => "admin_layout"
   end
 
   def create
@@ -24,7 +28,7 @@ class Admin::CategoriesController < AdminController
       redirect_to admin_categories_path
     else
       flash.now[:error] = "Did not create category, try again."
-      render :new
+      render :new, :layout => "admin_layout"
     end
   end
 
@@ -35,7 +39,7 @@ class Admin::CategoriesController < AdminController
       redirect_to admin_categories_path
     else
       flash.now[:error] = "Did not update category, try again."
-      render :edit
+      render :edit, :layout => "admin_layout"
     end
   end
 

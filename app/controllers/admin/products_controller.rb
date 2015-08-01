@@ -2,10 +2,12 @@ class Admin::ProductsController < AdminController
 
   def index
     @products = Product.all
+    render :layout => "admin_layout"
   end
 
   def new
     @product = Product.new
+    render :layout => "admin_layout"
   end
 
   def create
@@ -16,16 +18,18 @@ class Admin::ProductsController < AdminController
       redirect_to admin_products_path
     else
       flash.now[:error] = @product.errors.full_messages.first
-      render :new
+      render :new, :layout => "admin_layout"
     end
   end
 
   def show
     @product = Product.find(params[:id])
+    render :layout => "admin_layout"
   end
 
   def edit
     @product = Product.find(params[:id])
+    render :layout => "admin_layout"
   end
 
   def update
@@ -35,7 +39,7 @@ class Admin::ProductsController < AdminController
       redirect_to admin_products_path
     else
       flash.now[:error] = @product.errors.full_messages.first
-      render :edit
+      render :edit, :layout => "admin_layout"
     end
   end
 

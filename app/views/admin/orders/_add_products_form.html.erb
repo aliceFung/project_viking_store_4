@@ -1,0 +1,25 @@
+<h3>Add Products to Order</h3>
+<h5>Add up to 5 products at a time</h5>
+
+<%= form_tag admin_add_products_path(@order) do |f| %>
+  <table class= "table">
+    <tr>
+      <th>ProductID</th>
+      <th>Quantitiy</th>
+    </tr>
+
+
+    <% 5.times do |i| %>
+      <tr>
+         <td> <%= number_field_tag "product", nil ,
+                    name: "[products]" + "[product#{i}]" %> </td>
+         <td> <%= number_field_tag "q", nil,
+                    name: "[products]" + "[quantity#{i}]" %></td>
+      </tr>
+    <% end %>
+
+  </table>
+
+  <%= submit_tag%>
+
+<% end %>

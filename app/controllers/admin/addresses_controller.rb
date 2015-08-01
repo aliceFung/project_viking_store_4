@@ -13,12 +13,13 @@ class Admin::AddressesController < AdminController
     else
       @addresses = Address.all
     end
+    render :layout => "admin_layout"
   end
 
   def new
     @address = Address.new
     @user = User.find(params[:user_id])
-
+    render :layout => "admin_layout"
   end
 
   def create
@@ -30,18 +31,20 @@ class Admin::AddressesController < AdminController
       redirect_to admin_addresses_path
     else
       flash.now[:error] = @address.errors.full_messages.first
-      render :new
+      render :new, :layout => "admin_layout"
     end
   end
 
   def show
     @address = Address.find(params[:id])
+    render :layout => "admin_layout"
   end
 
   def edit
     @address = Address.find(params[:id])
 
     @user = User.find(@address.user_id)
+    render :layout => "admin_layout"
   end
 
   def update
@@ -52,7 +55,7 @@ class Admin::AddressesController < AdminController
       redirect_to admin_addresses_path
     else
       flash.now[:error] = @address.errors.full_messages.first
-      render :edit
+      render :edit, :layout => "admin_layout"
     end
   end
 

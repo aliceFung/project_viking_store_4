@@ -2,6 +2,8 @@ class OrderContent < ActiveRecord::Base
   belongs_to :order
   belongs_to :product
 
+  validates :quantity, numericality: true
+
   def value
     product.price*quantity
   end
