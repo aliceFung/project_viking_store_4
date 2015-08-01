@@ -96,8 +96,7 @@ class Admin::OrdersController < AdminController
   def add_products
     @order = Order.find(params[:id])
     @user = User.find(@order.user_id)
-    if params[:products]
-      @order.add_products(params)
+    if params[:products] && @order.add_products(params)
       flash[:success] = "Products successfully added to order."
       redirect_to admin_order_path(@order)
     else

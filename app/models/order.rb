@@ -61,7 +61,7 @@ class Order < ActiveRecord::Base
   def add_products(list)
     p_id_list = self.products.pluck(:id)
     list = process_params(list)
-
+    return false unless check_input(list.keys)
     list.each do |prod_id, quan|
       quan = quan.to_i
       if quan == 0
@@ -76,6 +76,12 @@ class Order < ActiveRecord::Base
       else
         next
       end
+    end
+  end
+
+  def check_input(id_list)
+    id_list.each do |id|
+      return false unless Product.where("id =?", id).first
     end
   end
 
