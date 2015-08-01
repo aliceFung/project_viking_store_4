@@ -26,4 +26,4 @@
   <%= submit_tag%>
 <% end %>
 
-<%= link_to "Delete Order", order_path(@order), method: :delete, data: {confirm: "Are you sure?"} %>
+<%= link_to "Delete Order", admin_order_path(@order), method: :delete, data: {confirm: "Are you sure?"} %>

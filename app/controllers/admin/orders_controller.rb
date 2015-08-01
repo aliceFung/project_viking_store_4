@@ -32,13 +32,12 @@ class Admin::OrdersController < AdminController
     else
         if @order.save
           flash[:success] = "New order created."
-          redirect_to edit_order_path(@order)
+          redirect_to edit_admin_order_path(@order)
         else
           flash.now[:error] = @order.errors.full_messages.first
-          render :new
+          render :new, :layout => "admin_layout"
         end
     end
-    render :layout => "admin_layout"
   end
 
   def show
@@ -77,7 +76,6 @@ class Admin::OrdersController < AdminController
       flash[:error] = @order.errors.full_messages.first
       redirect_to session.delete(:return_to)
     end
-    render :layout => "admin_layout"
   end
 
   def update_quantity

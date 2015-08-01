@@ -61,7 +61,7 @@ class Order < ActiveRecord::Base
   def add_products(list)
     p_id_list = self.products.pluck(:id)
     list = process_params(list)
-    return false unless check_input(list.keys)
+    return false unless valid_input?(list)
     list.each do |prod_id, quan|
       quan = quan.to_i
       if quan == 0
@@ -79,23 +79,27 @@ class Order < ActiveRecord::Base
     end
   end
 
-  def check_input(id_list)
-    id_list.each do |id|
+  #needs to be fixed
+  def valid_input?(id_list)
+    return false if id_list.empty?
+    id_list.each do |id, quan|
       return false unless Product.where("id =?", id).first
+      return false if (quan.nil? || quan <=0)
     end
   end
 
+  #very hacky, needs refactoring
   def process_params(list)
     # Parameters: {"utf8"=>"✓", "authenticity_token"=>"tGvVyCEfLgpv2xvd2UcSLnhS56lrjAqxg/O5M4DNmiY=", "order"=>{"products"=>{"product0"=>"3", "quantity0"=>"3", "product1"=>"", "quantity1"=>"", "product2"=>"", "quantity2"=>"", "product3"=>"", "quantity3"=>"", "product4"=>"", "quantity4"=>""}}, "commit"=>"Save changes", "id"=>"302"}
     hash = {}
     memory = []
     list[:products].each do |k, value|
-      if k[0] == "p"
+      if k[0] == "p" && !value.empty?
         hash[value] = nil
         memory[k[-1].to_i] = value.to_i
-      elsif k[0] == "q"
+      elsif k[0] == "q" && !value.empty?
         key = memory[k[-1].to_i]
-        hash[key] = value # if in order
+        hash[key] = value if key
       end
     end
     hash
